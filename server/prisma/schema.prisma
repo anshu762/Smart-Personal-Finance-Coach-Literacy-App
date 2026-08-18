@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EntryType {
+  INCOME
+  EXPENSE
+}
+
+enum AlertType {
+  OVERSPEND
+  SUBSCRIPTION_DUE
+}
+
+model User {
+  id            String        @id @default(cuid())
+  name          String
+  email         String        @unique
+  passwordHash  String
+  createdAt     DateTime      @default(now())
+  entries       Entry[]
+  goals         Goal[]
+  subscriptions Subscription[]
+  alerts        Alert[]
+  quizAttempts  QuizAttempt[]
+}
+
+model Entry {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  type      EntryType
+  category  String
+  amount    Float
+  note      String?
+  date      DateTime
+  createdAt DateTime  @default(now())
+}
+
+model Goal {
+  id           String    @id @default(cuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id])
+  title        String
+  targetAmount Float
+  savedAmount  Float     @default(0)
+  deadline     DateTime?
+  createdAt    DateTime  @default(now())
+}
+
+model Subscription {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  name       String
+  amount     Float
+  billingDay Int
+  active     Boolean  @default(true)
+}
+
+model Alert {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  type      AlertType
+  message   String
+  articleId String?
+  article   Article?  @relation(fields: [articleId], references: [id])
+  isRead    Boolean   @default(false)
+  createdAt DateTime  @default(now())
+}
+
+model Article {
+  id      String  @id @default(cuid())
+  title   String
+  summary String
+  body    String
+  tag     String
+  quiz    Quiz?
+  alerts  Alert[]
+}
+
+model Quiz {
+  id        String     @id @default(cuid())
+  articleId String     @unique
+  article   Article    @relation(fields: [articleId], references: [id])
+  questions Question[]
+}
+
+model Question {
+  id           String   @id @default(cuid())
+  quizId       String
+  quiz         Quiz     @relation(fields: [quizId], references: [id])
+  text         String
+  options      String[]
+  correctIndex Int
+}
+
+model QuizAttempt {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  quizId    String
+  score     Int
+  createdAt DateTime @default(now())
+}
