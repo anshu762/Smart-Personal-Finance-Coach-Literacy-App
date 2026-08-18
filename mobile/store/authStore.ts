@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import axios from "axios";
 import * as storage from "@/lib/storage";
 import { fetchMeRequest, type AuthUserData } from "@/lib/api";
 
@@ -60,7 +61,14 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ accessToken: token, isAuthenticated: true });
       const user = await fetchMeRequest();
       set({ user, isLoading: false });
-    } catch {
+    } catch (error) {
+      if (axios.isAxiosError(error) && !error.response) {
+        // Transient network failure: keep the session; the next API call
+        // will go through the refresh interceptor.
+        set({ isLoading: false });
+        return;
+      }
+
       await storage.clearTokens();
       set({
         user: null,

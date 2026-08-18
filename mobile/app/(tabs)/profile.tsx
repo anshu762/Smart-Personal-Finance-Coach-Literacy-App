@@ -1,3 +1,5 @@
+import { router } from "expo-router";
+import { useState } from "react";
 import { Text, View } from "react-native";
 import { Button, Card } from "@/components/ui";
 import { useAuth } from "@/hooks/useAuth";
@@ -6,6 +8,18 @@ import { useAuthStore } from "@/store/authStore";
 export default function ProfileScreen() {
   const { user } = useAuth();
   const logout = useAuthStore((state) => state.logout);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    if (isLoggingOut) return;
+    setIsLoggingOut(true);
+    try {
+      await logout();
+      router.replace("/login");
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   return (
     <View className="flex-1 bg-background p-4">
@@ -18,7 +32,13 @@ export default function ProfileScreen() {
         </Text>
       </Card>
 
-      <Button title="Sign out" variant="danger" onPress={() => void logout()} />
+      <Button
+        title="Sign out"
+        variant="danger"
+        loading={isLoggingOut}
+        disabled={isLoggingOut}
+        onPress={() => void handleLogout()}
+      />
     </View>
   );
 }

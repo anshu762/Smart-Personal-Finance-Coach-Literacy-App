@@ -89,7 +89,7 @@ let refreshPromise: Promise<string | null> | null = null;
 
 async function handleAuthFailure(): Promise<void> {
   await useAuthStore.getState().logout();
-  router.replace("/(auth)/login");
+  router.replace("/login");
 }
 
 api.interceptors.response.use(
