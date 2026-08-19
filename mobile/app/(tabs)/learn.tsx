@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { EmptyState } from "@/components/ui";
 
 export default function LearnScreen() {

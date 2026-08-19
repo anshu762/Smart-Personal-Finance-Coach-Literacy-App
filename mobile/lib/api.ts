@@ -165,6 +165,13 @@ export function isNetworkError(error: unknown): boolean {
   );
 }
 
+export function extractData<T>(res: { data: ApiBody<T> }): T {
+  if (!res.data.success) {
+    throw new Error(res.data.error.message);
+  }
+  return res.data.data;
+}
+
 export function getErrorMessage(error: unknown): string {
   if (axios.isAxiosError<ApiErrorBody>(error)) {
     return (

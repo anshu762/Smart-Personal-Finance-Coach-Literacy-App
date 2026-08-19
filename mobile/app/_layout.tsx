@@ -6,6 +6,7 @@ import { StatusBar } from "expo-status-bar";
 
 import { queryClient } from "@/lib/queryClient";
 import { useAuthStore } from "@/store/authStore";
+import { Toast } from "@/components/ui/Toast";
 
 import "../global.css";
 
@@ -33,6 +34,7 @@ export default function RootLayout() {
           <Stack.Screen name="goal/[id]" options={{ title: "Goal" }} />
           <Stack.Screen name="article/[id]" options={{ title: "Article" }} />
         </Stack>
+        <Toast />
       </QueryClientProvider>
     </SafeAreaProvider>
   );

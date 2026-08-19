@@ -7,6 +7,8 @@ import {
 } from "./middleware/error.middleware";
 import { prisma } from "./lib/prisma";
 import authRoutes from "./modules/auth/auth.routes";
+import ledgerRoutes from "./modules/ledger/ledger.routes";
+import goalsRoutes from "./modules/goals/goals.routes";
 
 export function createApp(): Express {
   const app: Express = express();
@@ -42,6 +44,8 @@ export function createApp(): Express {
   });
   app.use("/api/v1", healthRouter);
   app.use("/api/v1/auth", authRoutes);
+  app.use("/api/v1/ledger", ledgerRoutes);
+  app.use("/api/v1/goals", goalsRoutes);
 
   app.use(notFoundHandler);
   app.use(errorHandler);

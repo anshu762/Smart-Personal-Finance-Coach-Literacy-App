@@ -1,6 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
-import { Redirect } from "expo-router";
+import { Redirect, Tabs } from "expo-router";
 import { useAuthStore } from "@/store/authStore";
 
 type IoniconName = keyof typeof Ionicons.glyphMap;

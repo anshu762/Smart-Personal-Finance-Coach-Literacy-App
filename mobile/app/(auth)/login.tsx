@@ -134,7 +134,7 @@ export default function LoginScreen() {
       </Card>
 
       <View className="mt-6 flex-row justify-center">
-        <Text className="text-sm text-muted">Don't have an account? </Text>
+        <Text className="text-sm text-muted">Don’t have an account? </Text>
         <Link href="/(auth)/signup" className="text-sm font-semibold text-primary">
           Sign up
         </Link>
